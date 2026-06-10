@@ -1,3 +1,7 @@
 spring:
   application:
     name: land-routing-service
+
+routing:
+  countries-url: https://raw.githubusercontent.com/mledoze/countries/master/countries.json
+  algorithm: bfs

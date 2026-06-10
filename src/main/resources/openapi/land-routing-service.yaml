@@ -1,0 +1,82 @@
+openapi: 3.0.3
+info:
+  title: Land Routing Service API
+  version: 1.0.0
+  description: API for calculating land routes between countries by cca3 code.
+paths:
+  /routing/{origin}/{destination}:
+    get:
+      tags:
+        - Routing
+      operationId: findRoute
+      summary: Find a land route between two countries
+      parameters:
+        - name: origin
+          in: path
+          required: true
+          description: Origin country cca3 code
+          schema:
+            type: string
+            example: CZE
+        - name: destination
+          in: path
+          required: true
+          description: Destination country cca3 code
+          schema:
+            type: string
+            example: ITA
+      responses:
+        '200':
+          description: Route found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteResponse'
+        '400':
+          description: Invalid country code or no land route available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+components:
+  schemas:
+    RouteResponse:
+      type: object
+      required:
+        - route
+      properties:
+        route:
+          type: array
+          items:
+            type: string
+          example:
+            - CZE
+            - AUT
+            - ITA
+    ApiErrorResponse:
+      type: object
+      required:
+        - status
+        - error
+        - message
+        - path
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: No land route found
+        path:
+          type: string
+          example: /routing/PRT/ITA

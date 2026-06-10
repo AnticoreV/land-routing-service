@@ -1,5 +1,6 @@
 package com.ivan.landroutingservice.exceptions;
 
+import com.ivan.landroutingservice.api.model.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +25,11 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<ApiErrorResponse> buildErrorResponse(HttpStatus status, String message, String path) {
-        ApiErrorResponse response = new ApiErrorResponse(
-                status.value(),
-                status.getReasonPhrase(),
-                message,
-                path
-        );
+        ApiErrorResponse response = new ApiErrorResponse()
+                .status(status.value())
+                .error(status.getReasonPhrase())
+                .message(message)
+                .path(path);
         return ResponseEntity.status(status).body(response);
     }
 }
